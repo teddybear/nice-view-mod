@@ -1,5 +1,4 @@
 name: nice-view-mod
 build:
-  cmake: .
   settings:
     board_root: .
