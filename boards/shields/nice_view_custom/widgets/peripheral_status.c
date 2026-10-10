@@ -6,6 +6,7 @@
  */
 
 #include <zephyr/kernel.h>
+#include <stdio.h>
 #include <zephyr/random/random.h>
 
 #include <zephyr/logging/log.h>
@@ -37,6 +38,8 @@ static void draw_top(lv_obj_t *widget, lv_color_t cbuf[], const struct status_st
 
     lv_draw_label_dsc_t label_dsc;
     init_label_dsc(&label_dsc, LVGL_FOREGROUND, &lv_font_montserrat_16, LV_TEXT_ALIGN_RIGHT);
+    lv_draw_label_dsc_t label_dsc_pct;
+    init_label_dsc(&label_dsc_pct, LVGL_FOREGROUND, &lv_font_unscii_8, LV_TEXT_ALIGN_LEFT);
     lv_draw_rect_dsc_t rect_black_dsc;
     init_rect_dsc(&rect_black_dsc, LVGL_BACKGROUND);
 
@@ -45,6 +48,11 @@ static void draw_top(lv_obj_t *widget, lv_color_t cbuf[], const struct status_st
 
     // Draw battery
     draw_battery(canvas, state);
+
+    // Draw battery percentage next to the battery icon
+    char pct_text[5] = {};
+    snprintf(pct_text, sizeof(pct_text), "%u%%", state->battery);
+    canvas_draw_text(canvas, 37, 4, 31, &label_dsc_pct, pct_text);
 
     // Draw output status
     canvas_draw_text(canvas, 0, 0, CANVAS_SIZE, &label_dsc,
